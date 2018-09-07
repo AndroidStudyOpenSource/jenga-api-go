@@ -1,11 +1,13 @@
 package jenga
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/davecgh/go-spew/spew"
 	"log"
 	"net/http"
+	"net/url"
+	"strings"
 	"time"
 )
 
@@ -30,23 +32,14 @@ type Service struct {
 
 //Generate the Jenga
 // Access Token
-func (s Service) auth() (string, error) {
+func (s Service) Auth() (string, error) {
 
-	type Credentials struct {
-		username, password string
-	}
-
-	credentials := new(Credentials)
-	credentials.username = s.Username
-	credentials.password = s.Password
-
-	body, err := json.Marshal(credentials)
-	if err != nil {
-		return "", nil
-	}
+	data := url.Values{}
+	data.Set("username", s.Username)
+	data.Add("password", s.Password)
 
 	url := s.baseURL() + "identity-test/v2/token"
-	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(body))
+	req, err := http.NewRequest(http.MethodPost, url,  strings.NewReader(data.Encode()))
 	if err != nil {
 		return "", err
 	}
@@ -69,7 +62,12 @@ func (s Service) auth() (string, error) {
 		return "", fmt.Errorf("could not decode auth response: %v", err)
 	}
 
+	str := spew.Sdump(authResponse)
+	log.Printf(str)
+
 	accessToken := authResponse.AccessToken
+	log.Println("Username is ", s.Username)
+	log.Println("Password is ", s.Password)
 	log.Println("Token is ", accessToken)
 	return accessToken, nil
 }
