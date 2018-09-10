@@ -17,10 +17,10 @@ func main() {
 		panic(err)
 	}
 
-	res, err := jeng.Auth()
-	if err != nil {
-		log.Println(err)
-	}
+	res := jeng.BalanceInquiry()
+	//if err != nil {
+	//	log.Println(err)
+	//}
 	log.Println(res)
 
 }
