@@ -121,6 +121,26 @@ func (s Service) MobileWalletRequest(mobileWallets MobileWallets) (string, error
 	return s.newReq(reqUrl, body, headers)
 }
 
+// RTGSRequest sends a new request
+func (s Service) RTGSRequest(rtgs RTGS) (string, error) {
+	body, err := json.Marshal(rtgs)
+	if err != nil {
+		return "", nil
+	}
+	auth, err := s.auth()
+	if err != nil {
+		return "", nil
+	}
+
+	headers := make(map[string]string)
+	headers["Content-Type"] = "application/json"
+	headers["Authorization"] = "Bearer " + auth
+	headers["signature"] = signature
+
+	reqUrl := s.baseURL() + "transaction-test/v2/remittance"
+	return s.newReq(reqUrl, body, headers)
+}
+
 func (s Service) newReq(url string, body []byte, headers map[string]string) (string, error) {
 	request, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(body))
 	if err != nil {

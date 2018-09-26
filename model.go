@@ -34,3 +34,26 @@ type MobileWallets struct {
 		Description  string `json:"description"`
 	} `json:"transfer"`
 }
+
+type RTGS struct {
+	Source struct {
+		CountryCode   string `json:"countryCode"`
+		Name          string `json:"name"`
+		AccountNumber string `json:"accountNumber"`
+	} `json:"source"`
+	Destination struct {
+		Type          string `json:"type"`
+		CountryCode   string `json:"countryCode"`
+		Name          string `json:"name"`
+		BankCode      string `json:"bankCode"`
+		AccountNumber string `json:"accountNumber"`
+	} `json:"destination"`
+	Transfer struct {
+		Type         string `json:"type"`
+		Amount       string `json:"amount"`
+		CurrencyCode string `json:"currencyCode"`
+		Reference    string `json:"reference"`
+		Date         string `json:"date"`
+		Description  string `json:"description"`
+	} `json:"transfer"`
+}
